@@ -1,18 +1,14 @@
+##
 ## This pair of functions allows caching of a potentially expensive matrix inversion.
+##
+
 ##
 ## The makeCacheMatrix routine creates a special version of a matrix that caches
 ## the result of a matrix inversion (although there is nothing in the makeCacheMatrix
-## routine specific to matrix inversion since the routine using it chooses what to set
-## the invMatrix value to). 
-## routine makes use ...
+## routine besides the input argument initializer that is specific to matrices and
+## nothing at all specific to matrix inversion). The routine makes use of the <<- 
+## assignment operator to accomplish the caching in the parent environment.
 ##
-## The cacheSolve routine returns the inverse of the input matrix. If the matrix has
-## not yet been encountered, it will compute the inverse and cache it. On subsequent calls
-## with the same input matrix, cacheSolve will simple return the cached version. It only
-## caches the result for the most recent input matrix.
-
-
-
 makeCacheMatrix <- function(x = matrix()) {
         invMatrix <- NULL
         set <- function(y) {
@@ -25,9 +21,12 @@ makeCacheMatrix <- function(x = matrix()) {
         list(set = set, get = get, setinverse = setinverse, getinverse = getinverse)
 }
 
-
-## Write a short comment describing this function
-
+##
+## The cacheSolve routine returns the inverse of the input matrix. If the matrix has
+## not yet been encountered (i.e., the value returned by getinverse() is null), it
+## will compute the inverse and cache it. On subsequent calls with the same
+## input matrix, cacheSolve will simple return the cached version. 
+##
 cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
         mi <- x$getinverse()
